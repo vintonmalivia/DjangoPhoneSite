@@ -1,0 +1,7 @@
+{% for brand in brands %}
+    {% if brand.pk == brand_selected %}
+        <li class="selected">{{ brand.name }}</li>
+    {% else %}
+        <li><a href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
+    {% endif %}
+{% endfor %}
