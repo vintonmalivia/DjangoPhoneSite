@@ -38,21 +38,28 @@ def contact(request):
     return HttpResponse('Обратная связь')
 
 
-def show_post(request, post_id):
-    return HttpResponse(f'Отображение статьи с id = {post_id}')
+def show_post(request, post_slug):
+    post = get_object_or_404(Phone, slug=post_slug)
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'brand_selected': post.brand.slug
+    }
+    return render(request, 'phones/post.html', context=context)
 
 
-def show_brand(request, brand_id):
-    posts = Phone.objects.filter(brand_id=brand_id)
+def show_brand(request, brand_slug):
+    posts = Phone.objects.filter(brand__slug=brand_slug)
 
-    if len(posts) == 0:
+    if len(posts) == 0 and not Brand.objects.filter(slug=brand_slug).exists():
         raise Http404()
 
     context = {
         'posts': posts,
         'menu': menu,
         'title': 'Отображение по брэндам',
-        'brand_selected': brand_id
+        'brand_selected': brand_slug
     }
     return render(request, 'phones/index.html', context=context)
 

@@ -10,13 +10,14 @@ class PhoneAdmin(admin.ModelAdmin):
     search_fields = ('title', 'contents')
     list_editable = ('is_published',)
     list_filter = ('is_published', 'time_create')
+    prepopulated_fields = {'slug': ('title',)}
 
 
 class BrandAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
     search_fields = ('name', )
-
+    prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Phone, PhoneAdmin)
 admin.site.register(Brand, BrandAdmin)
