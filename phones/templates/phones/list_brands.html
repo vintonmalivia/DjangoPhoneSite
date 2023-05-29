@@ -1,5 +1,5 @@
 {% for brand in brands %}
-    {% if brand.pk == brand_selected %}
+    {% if brand.slug == brand_selected %}
         <li class="selected">{{ brand.name }}</li>
     {% else %}
         <li><a href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
