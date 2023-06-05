@@ -40,8 +40,15 @@
         <li><a href="{% url 'home' %}">Все брэнды</a></li>
     {% endif %}
 
-    {% show_brands 'name' brand_selected %}
-
+{% for brand in brands %}
+    {% if brand.phone__count > 0 %}
+        {% if brand.slug == brand_selected %}
+            <li class="selected">{{ brand.name }}</li>
+        {% else %}
+            <li><a href="{{ brand.get_absolute_url }}">{{ brand.name }}</a></li>
+        {% endif %}
+    {% endif %}
+{% endfor %}
 	</ul>
 </td>
 <!-- Конец Sidebar'а -->
