@@ -21,7 +21,7 @@ class Phone(models.Model):
     class Meta:
         verbose_name = 'Телефоны'
         verbose_name_plural = 'Телефоны'
-        ordering = ['time_create', 'title']
+        ordering = ['id']
 
 
 class Brand(models.Model):

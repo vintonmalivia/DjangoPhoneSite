@@ -11,6 +11,8 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 
 class DataMixin:
 
+    paginate_by = 3
+
     def get_user_context(self, **kwargs):
         context = kwargs
         brands = Brand.objects.annotate(Count('phone'))
