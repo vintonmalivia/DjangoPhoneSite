@@ -1,3 +1,6 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
 from django.http import *
 from django.shortcuts import *
 from django.urls import reverse_lazy
@@ -76,8 +79,8 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-def login(request):
-    return HttpResponse('Авторизация')
+# def login(request):
+#     return HttpResponse('Авторизация')
 
 
 def contact(request):
@@ -104,7 +107,7 @@ class ShowPost(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['post'].title,
                                       brand_selected=context['post'].brand.slug)
-        return dict(list(context.items())+list(c_def.items()))
+        return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
         return Phone.objects.filter(is_published=True)
@@ -151,6 +154,28 @@ class RegisterUser(DataMixin, CreateView):
         c_def = self.get_user_context(title='Регистрация')
         return dict(list(context.items()) + list(c_def.items()))
 
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'phones/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Вход')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
 
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена<h1>')
