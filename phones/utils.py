@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db.models import Count
 
 from phones.models import Brand
@@ -14,7 +15,10 @@ class DataMixin:
 
     def get_user_context(self, **kwargs):
         context = kwargs
-        brands = Brand.objects.annotate(Count('phone'))
+        brands = cache.get('brands')
+        if not brands:
+            brands = Brand.objects.annotate(Count('phone'))
+            cache.set('brands', brands, 60)
         user_menu = menu.copy()
         if not self.request.user.is_authenticated:
             user_menu.pop(1)
