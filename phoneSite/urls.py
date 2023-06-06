@@ -22,9 +22,15 @@ from phones.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('phones.urls'))
+    path('', include('phones.urls')),
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
     urlpatterns += static(settings.MEDIA_URL, documentroot=settings.MEDIA_ROOT)
+
 handler404 = page_not_found

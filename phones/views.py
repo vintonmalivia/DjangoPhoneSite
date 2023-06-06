@@ -31,7 +31,7 @@ class PhoneHome(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Phone.objects.filter(is_published=True)
+        return Phone.objects.filter(is_published=True).select_related('brand')
 
 
 # def index(request):
@@ -141,7 +141,7 @@ class PhoneBrand(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        return Phone.objects.filter(brand__slug=self.kwargs['brand_slug'], is_published=True)
+        return Phone.objects.filter(brand__slug=self.kwargs['brand_slug'], is_published=True).select_related('brand')
 
 
 class RegisterUser(DataMixin, CreateView):
