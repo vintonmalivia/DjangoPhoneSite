@@ -141,5 +141,16 @@ class PhoneBrand(DataMixin, ListView):
         return Phone.objects.filter(brand__slug=self.kwargs['brand_slug'], is_published=True)
 
 
+class RegisterUser(DataMixin, CreateView):
+    form_class = RegisterUserForm
+    template_name = 'phones/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Регистрация')
+        return dict(list(context.items()) + list(c_def.items()))
+
+
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена<h1>')
