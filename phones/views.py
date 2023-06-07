@@ -83,8 +83,23 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
 #     return HttpResponse('Авторизация')
 
 
-def contact(request):
-    return HttpResponse('Обратная связь')
+# def contact(request):
+#     return HttpResponse('Обратная связь')
+
+
+class ContactFormView(DataMixin, FormView):
+    form_class = ContactForm
+    template_name = 'phones/contact.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Обратная связь')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return redirect('home')
 
 
 # def show_post(request, post_slug):
